@@ -21,19 +21,27 @@ const io = new Server(server, {
       "http://localhost:5173",
       "https://chatcove-shahin.surge.sh",
       "https://chatcove.onrender.com",
+      "https://chatcove-eaca5.web.app",
     ],
     credentials: true,
   },
 });
 
 app.use(express.json());
-app.use(formData.parse());
+app.use(
+  formData.parse({
+    autoClean: true,
+    withFiles: true,
+    cookie: true,
+  })
+);
 app.use(
   cors({
     origin: [
       "http://localhost:5173",
       "https://chatcove-shahin.surge.sh",
       "https://chatcove.onrender.com",
+      "https://chatcove-eaca5.web.app",
     ],
     credentials: true,
   })
@@ -190,13 +198,13 @@ app.post("/message", async (req, res) => {
   }
 });
 
-app.get("/checkuser", auth, async (req, res) => {
+app.get("/checkuser", async (req, res) => {
   const result = await userCollection2
     .find({}, { projection: { password: 0 } })
     .toArray();
   res.status(200).send(result);
 });
-app.get("/users", auth, async (req, res) => {
+app.get("/users", async (req, res) => {
   const result = await userCollection
     .find({}, { projection: { password: 0 } })
     .toArray();
@@ -210,12 +218,12 @@ app.get("/users/:email", async (req, res) => {
   );
   res.status(200).send(result);
 });
-app.get("/message", auth, async (req, res) => {
+app.get("/message", async (req, res) => {
   const result = await conversationCollection.find().toArray();
   res.status(200).send(result);
 });
 
-app.get("/message/:roomId", auth, async (req, res) => {
+app.get("/message/:roomId", async (req, res) => {
   const roomId = req.params.roomId;
   const result = await conversationCollection
     .find({ roomId: +roomId })
