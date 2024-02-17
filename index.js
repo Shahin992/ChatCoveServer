@@ -17,7 +17,11 @@ const app = express();
 const server = createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: ["http://localhost:5173", "https://chatcove-shahin.surge.sh"],
+    origin: [
+      "http://localhost:5173",
+      "https://chatcove-shahin.surge.sh",
+      "https://chatcove.onrender.com",
+    ],
     credentials: true,
   },
 });
@@ -26,13 +30,16 @@ app.use(express.json());
 app.use(formData.parse());
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://chatcove-shahin.surge.sh"],
+    origin: [
+      "http://localhost:5173",
+      "https://chatcove-shahin.surge.sh",
+      "https://chatcove.onrender.com",
+    ],
     credentials: true,
   })
 );
 
-const uri =
-  `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.c60ctk1.mongodb.net/?retryWrites=true&w=majority`;
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.c60ctk1.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, {
   serverApi: {
     version: ServerApiVersion.v1,
