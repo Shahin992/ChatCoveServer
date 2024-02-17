@@ -1,4 +1,5 @@
 const express = require("express");
+require("dotenv").config();
 const formData = require("express-form-data");
 const { MongoClient, ServerApiVersion } = require("mongodb");
 const { createServer } = require("http");
@@ -16,7 +17,7 @@ const app = express();
 const server = createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: ["http://localhost:5173"],
+    origin: ["http://localhost:5173", "https://chatcove-shahin.surge.sh"],
     credentials: true,
   },
 });
@@ -25,14 +26,13 @@ app.use(express.json());
 app.use(formData.parse());
 app.use(
   cors({
-    origin: ["http://localhost:5173"],
+    origin: ["http://localhost:5173", "https://chatcove-shahin.surge.sh"],
     credentials: true,
   })
 );
 
-// mongopass: 3XhWTRibw9U9wtT8
 const uri =
-  "mongodb+srv://ChatCove:3XhWTRibw9U9wtT8@cluster0.c60ctk1.mongodb.net/?retryWrites=true&w=majority";
+  `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.c60ctk1.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, {
   serverApi: {
     version: ServerApiVersion.v1,
@@ -134,7 +134,7 @@ io.on("connection", (socket) => {
 //   const result = await userCollection.insertOne(userWithId)
 //   res.status(200).send(result)
 // })
-app.post("/users",  async (req, res) => {
+app.post("/users", async (req, res) => {
   const { name, email, password } = JSON.parse(req.body.data);
   const photo = await fileUp(req.files.photo.path);
   const id = Math.floor(Math.random() * 100000);
@@ -184,12 +184,12 @@ app.get("/users/:email", auth, async (req, res) => {
   );
   res.status(200).send(result);
 });
-app.get("/message",auth, async (req, res) => {
+app.get("/message", auth, async (req, res) => {
   const result = await conversationCollection.find().toArray();
   res.status(200).send(result);
 });
 
-app.get("/message/:roomId",auth, async (req, res) => {
+app.get("/message/:roomId", auth, async (req, res) => {
   const roomId = req.params.roomId;
   const result = await conversationCollection
     .find({ roomId: +roomId })
