@@ -184,12 +184,12 @@ app.post("/message", async (req, res) => {
     if (req.files.photo) {
       req.body.image = await fileUp(req.files.photo.path);
     }
-    console.log(req.body);
+
     const conversation = await conversationCollection.insertOne(req.body);
     const message = await conversationCollection.findOne({
       _id: conversation.insertedId,
     });
-    console.log(message);
+
     io.to(message.roomId).emit("message", message);
     return res.status(200).send("ok");
   } catch (err) {
@@ -204,13 +204,13 @@ app.get("/checkuser", async (req, res) => {
     .toArray();
   res.status(200).send(result);
 });
-app.get("/users", auth, async (req, res) => {
+app.get("/users", async (req, res) => {
   const result = await userCollection
     .find({}, { projection: { password: 0 } })
     .toArray();
   res.status(200).send(result);
 });
-app.get("/users/:email", auth, async (req, res) => {
+app.get("/users/:email", async (req, res) => {
   const email = req.params.email;
   const result = await userCollection.findOne(
     { email },
@@ -218,12 +218,12 @@ app.get("/users/:email", auth, async (req, res) => {
   );
   res.status(200).send(result);
 });
-app.get("/message", auth, async (req, res) => {
+app.get("/message", async (req, res) => {
   const result = await conversationCollection.find().toArray();
   res.status(200).send(result);
 });
 
-app.get("/message/:roomId", auth, async (req, res) => {
+app.get("/message/:roomId", async (req, res) => {
   const roomId = req.params.roomId;
   const result = await conversationCollection
     .find({ roomId: +roomId })
