@@ -22,6 +22,7 @@ const io = new Server(server, {
       "https://chatcove-shahin.surge.sh",
       "https://chatcove.onrender.com",
       "https://chatcove-eaca5.web.app",
+      "https://chatcove-shahin.web.app",
     ],
     credentials: true,
   },
@@ -42,6 +43,7 @@ app.use(
       "https://chatcove-shahin.surge.sh",
       "https://chatcove.onrender.com",
       "https://chatcove-eaca5.web.app",
+      "https://chatcove-shahin.web.app",
     ],
     credentials: true,
   })
