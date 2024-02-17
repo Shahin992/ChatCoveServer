@@ -204,13 +204,13 @@ app.get("/checkuser", async (req, res) => {
     .toArray();
   res.status(200).send(result);
 });
-app.get("/users", async (req, res) => {
+app.get("/users",auth, async (req, res) => {
   const result = await userCollection
     .find({}, { projection: { password: 0 } })
     .toArray();
   res.status(200).send(result);
 });
-app.get("/users/:email", async (req, res) => {
+app.get("/users/:email",auth, async (req, res) => {
   const email = req.params.email;
   const result = await userCollection.findOne(
     { email },
@@ -218,12 +218,12 @@ app.get("/users/:email", async (req, res) => {
   );
   res.status(200).send(result);
 });
-app.get("/message", async (req, res) => {
+app.get("/message",auth, async (req, res) => {
   const result = await conversationCollection.find().toArray();
   res.status(200).send(result);
 });
 
-app.get("/message/:roomId", async (req, res) => {
+app.get("/message/:roomId",auth, async (req, res) => {
   const roomId = req.params.roomId;
   const result = await conversationCollection
     .find({ roomId: +roomId })
