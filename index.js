@@ -140,9 +140,7 @@ app.get("/me", auth, (req, res) => {
 });
 // Log out Route
 app.post("/logout", (req, res) => {
-  res
-    .clearCookie("token", { maxAge: new Date(Date.now() + 86400000) })
-    .send({ success: true });
+  res.clearCookie("token", { maxAge: 0 }).send({ success: true });
 });
 
 io.on("connection", (socket) => {
@@ -204,13 +202,13 @@ app.get("/checkuser", async (req, res) => {
     .toArray();
   res.status(200).send(result);
 });
-app.get("/users",auth, async (req, res) => {
+app.get("/users", auth, async (req, res) => {
   const result = await userCollection
     .find({}, { projection: { password: 0 } })
     .toArray();
   res.status(200).send(result);
 });
-app.get("/users/:email",auth, async (req, res) => {
+app.get("/users/:email", auth, async (req, res) => {
   const email = req.params.email;
   const result = await userCollection.findOne(
     { email },
@@ -218,12 +216,12 @@ app.get("/users/:email",auth, async (req, res) => {
   );
   res.status(200).send(result);
 });
-app.get("/message",auth, async (req, res) => {
+app.get("/message", auth, async (req, res) => {
   const result = await conversationCollection.find().toArray();
   res.status(200).send(result);
 });
 
-app.get("/message/:roomId",auth, async (req, res) => {
+app.get("/message/:roomId", auth, async (req, res) => {
   const roomId = req.params.roomId;
   const result = await conversationCollection
     .find({ roomId: +roomId })
