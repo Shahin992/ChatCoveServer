@@ -96,26 +96,45 @@ app.get("/", (req, res) => {
 
 // Login Route
 app.post("/login", async (req, res) => {
-  const { email, password } = req.body;
+  try {
+    const { email, password } = req.body;
 
-  const isValid = await userCollection.findOne({ email: email });
-  if (!isValid) return res.status(404).send("User Not Found");
-  const passwordMatch = await bcrypt.compare(password, isValid.password);
-  if (!passwordMatch) return res.status(401).send("User Unauthorised");
-  const token = jwt.sign({ email, id: isValid._id }, "itsSecret");
-  res.cookie("token", token, {
-    httpOnly: true,
-    secure: true,
-    sameSite: "none",
-  });
-  return res.status(200).send(isValid);
+    const isValid = await userCollection.findOne({ email: email });
+    if (!isValid) return res.status(404).send("User Not Found");
+
+    const passwordMatch = await bcrypt.compare(password, isValid.password);
+    if (!passwordMatch) return res.status(401).send("User Unauthorized");
+
+    const token = jwt.sign({ email, id: isValid._id }, "itsSecret", {
+      expiresIn: "1d",
+    });
+
+    if (!token) {
+      return res.status(500).send("Error creating token");
+    }
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+      expires: new Date(Date.now() + 86400000),
+    });
+
+    return res.status(200).send(isValid);
+  } catch (error) {
+    console.error("Login error:", error);
+    return res.status(500).send("Internal Server Error");
+  }
 });
+
 app.get("/me", auth, (req, res) => {
   return res.status(200).send(req.user);
 });
 // Log out Route
 app.post("/logout", (req, res) => {
-  res.clearCookie("token", { maxAge: 0 }).send({ success: true });
+  res
+    .clearCookie("token", { maxAge: new Date(Date.now() + 86400000) })
+    .send({ success: true });
 });
 
 io.on("connection", (socket) => {
