@@ -115,16 +115,17 @@ app.get("/health", (req, res) => {
 
 
 setInterval(async () => {
-    try {
-      const url = "https://chatcove.onrender.com/health";
-      console.log(`Pinging ${url}...`);
-      const response = await fetch(url);
-      console.log(`Ping status: ${response.status}`);
-    } catch (error) {
-      console.error("Ping failed:", error.message);
-    }
-  }, 5 * 60 * 1000); // 5 minutes in milliseconds
-});
+  try {
+    const url = "https://chatcove.onrender.com/health";
+
+    console.log(`Pinging ${url}...`);
+
+    const response = await fetch(url);
+    console.log(`Ping status: ${response.status}`);
+  } catch (error) {
+    console.error("Ping failed:", error.message);
+  }
+}, 5 * 60 * 1000); // 5 minutes in milliseconds
 // Login Route
 app.post("/login", async (req, res) => {
   try {
