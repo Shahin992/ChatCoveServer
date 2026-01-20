@@ -117,9 +117,9 @@ app.get("/health", (req, res) => {
 setInterval(async () => {
     try {
       const url = "https://chatcove.onrender.com/health";
-      console.log(Pinging ${url}...);
+      console.log(`Pinging ${url}...`);
       const response = await fetch(url);
-      console.log(Ping status: ${response.status});
+      console.log(`Ping status: ${response.status}`);
     } catch (error) {
       console.error("Ping failed:", error.message);
     }
