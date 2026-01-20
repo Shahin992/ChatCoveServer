@@ -104,6 +104,27 @@ app.get("/", (req, res) => {
   res.send("<h1>ChatCove Server is Running</h1>");
 });
 
+app.get("/health", (req, res) => {
+  res.status(200).json({
+    status: "ok",
+    uptime: process.uptime(),
+    timestamp: Date.now(),
+  });
+   res.send("<h1>ChatCove Server Running</h1>");
+});
+
+
+setInterval(async () => {
+    try {
+      const url = "https://chatcove.onrender.com/health";
+      console.log(Pinging ${url}...);
+      const response = await fetch(url);
+      console.log(Ping status: ${response.status});
+    } catch (error) {
+      console.error("Ping failed:", error.message);
+    }
+  }, 5 * 60 * 1000); // 5 minutes in milliseconds
+});
 // Login Route
 app.post("/login", async (req, res) => {
   try {
