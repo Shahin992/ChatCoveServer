@@ -126,8 +126,8 @@ setInterval(async () => {
 
     console.log(`Pinging ${clientoUrl}...`);
 
-    const response = await fetch(clientoUrl);
-    console.log(`Ping status: ${response.status}`);
+    const response2 = await fetch(clientoUrl);
+    console.log(`Ping status: ${response2.status}`);
   } catch (error) {
     console.error("Ping failed:", error.message);
   }
