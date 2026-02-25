@@ -122,7 +122,7 @@ setInterval(async () => {
 
     const response = await fetch(url);
     console.log(`Ping status: ${response.status}`);
-     const clientoUrl = "https://cliento-server.vercel.app";
+     const clientoUrl = "https://cliento-server.vercel.app/api-docs";
 
     console.log(`Pinging ${clientoUrl}...`);
 
