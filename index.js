@@ -122,6 +122,12 @@ setInterval(async () => {
 
     const response = await fetch(url);
     console.log(`Ping status: ${response.status}`);
+     const clientoUrl = "https://cliento-server.vercel.app";
+
+    console.log(`Pinging ${clientoUrl}...`);
+
+    const response = await fetch(clientoUrl);
+    console.log(`Ping status: ${response.status}`);
   } catch (error) {
     console.error("Ping failed:", error.message);
   }
